@@ -8,24 +8,80 @@
 </head>
 
 <body>
-    <div class="container mx-auto my-10">
+    <div class="container mx-auto my-10 md:max-w-lg">
         <!-- Header -->
-        <h1 class="text-5xl text-center">Vanilla JS</h1>
-        <p class="text-center">Selitysteksti</p>
+        <h1 class="text-5xl text-center font-bold">Todo-list</h1>
+        <h2 class="text-3xl text-center mb-2">in vanilla JS</h1>
+        <p class="text-center">The purpose of this Todo-list is to compare making a simple web app with native Javascript against a framework like Vue.js or React</p>
     </div>
+
+    <div class="container mx-auto md:w-1/2">
 
     <!-- TODO list -->
-    <ul id="todos"></ul>
+    <ul id="todos" class="outline outline-1 outline-gray-100 mb-3 py-2 list-inside list-disc "></ul>
 
     <!-- Counter -->
-    <div class="container bg-slate-200">
-        <form>
-            <input name="todo" type="text">
-            <input type="submit" value="Add Todo">
+        <form class="flex flex-col text-center">
+            <label for="todo">insert a Todo:</label>
+            <input name="todo" type="text" class="transition-all duration-300 bg-orange-100 mb-4 outline outline-1 outline-orange-300 md:w-1/2 mx-auto focus:outline-orange-400 focus:drop-shadow-sm">
+            <input type="submit" value="Add Todo" class="transition-all duration-300 text-center  w-32 mx-auto p-1 bg-orange-300 hover:text-gray-50 hover:outline hover:outline-2 hover:outline-orange-300 hover:outline-offset-2">
         </form>
+        <button id="clearbtn" class="transition-all duration-300 mx-auto block w-32 outline outline-2 outline-orange-300 p-1 hover:bg-orange-300 hover:text-gray-50 hover:outline-offset-2">
+            Clear Todo -list
+        </button>
     </div>
 
-    <script src="js/script.js"></script>
+    <section class="my-16 py-5 bg-orange-100">
+        <div class="container md:max-w-lg mx-auto">
+            <p>If you want to take a look at the Github repository with the other Framework comparisons and their code, you can do it from the link below.</p>
+            <a href="https://github.com/sakuexe/JavascriptFrameworkTesting" target="_blank" class="transition-all duration-300 font-bold hover:text-orange-600">
+                Link to the repository
+            </a>
+        </div>
+    </section>
+
+    <footer class="text-center max-w-md mx-auto italic text-sm">
+        <p>&copy; SakuK 2022</p>
+        <p>2/10/2022</p>
+    </footer>
+
+    <script>
+
+        const form = document.querySelector('form')
+        const input = document.querySelector("[name='todo']")
+        const todoList = document.querySelector('#todos')
+        const clearbtn = document.querySelector('#clearbtn')
+
+        const existingTodos = JSON.parse(localStorage.getItem('todos'))
+
+        const todoData = existingTodos || []
+
+        todoData.forEach(todo => {
+            addTodo(todo)
+        });
+
+        function addTodo(todoText) {
+            const li = document.createElement('li')
+            li.innerHTML = todoText
+            li.classList.add('even:bg-orange-100', 'px-3', 'hover:opacity-75', 'transition-all', 'duration-300')
+            todoList.appendChild(li)
+            localStorage.setItem('todos', JSON.stringify(todoData))
+        }
+
+        // events
+        form.onsubmit = (event) => {
+            event.preventDefault();     // prevents the page from refreshing when clicking the submit button
+            todoData.push(input.value)  // adds the given value to the todo list, before it's submitted visually
+            addTodo(input.value)
+        }
+
+        clearbtn.addEventListener('click', _ => {
+            // clears local storage and the visual element
+            localStorage.clear()
+            todoList.innerHTML = ''
+        })
+
+    </script>
 
 </body>
 </html>
